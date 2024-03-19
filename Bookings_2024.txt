@@ -1,0 +1,3 @@
+Day 1 ticket,850
+Day 2 ticket,850
+Weekend-Camp,2000
