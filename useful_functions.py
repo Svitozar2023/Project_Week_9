@@ -1,13 +1,15 @@
 def get_string(prompt):
     while True:
         try:
-            name = input(prompt)
-            length = len(name)
-            if length > 0 and length < 15:
+            answer = input(prompt)
+            length = len(answer)
+            if answer.isalpha() and length > 0 and length < 15:
                 break
+            else:
+                print("The name must be alphabetic and between 1 and 14 characters.")
         except:
-            print("The length of the name must be between 1 and 14 characters.")
-    return name
+            print("Error occured ")
+    return answer
 def get_positive_int(prompt):
     while True:
         try:
@@ -29,3 +31,8 @@ def get_number_max4(prompt):
         except:
             print("Error occured")
     return num
+def main():
+    name = get_string("Enter your name: ")
+    print(name)
+if __name__ == "__main__":
+    main()
