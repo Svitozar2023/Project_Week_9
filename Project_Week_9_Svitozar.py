@@ -96,7 +96,7 @@ def booking_a_ticket(types_of_tickets, ticket_prices, extras_ticket_type, extras
                 price = ticket_prices[1]
                 break
         elif ticket_type_choice == "3":
-            ticket_type = "Weekend-Deluxe"
+            ticket_type = "Weekend-Camp"
             people_in_group = useful_functions.get_number_max4("How many people in your group? ")
             answer_fine_dining = "Included"
             price = ticket_prices[2] * people_in_group
@@ -120,12 +120,29 @@ def booking_a_ticket(types_of_tickets, ticket_prices, extras_ticket_type, extras
 
     # return name, phone_number, ticket_type, people_in_group, answer_fine_dining, price
     return feedback_to_user, ticket_name_list, people_in_group_list
-def bookings_review(feedback, ticket_name_list, people_in_group_list):
-    # The number of tickets sold for each type of ticket
-    sales_all_tickets_file = open("Number_tickets_sold_by_type.txt", "a")
-    for a, ticket_type in enumerate(ticket_name_list):
-        sales_all_tickets_file.write(f"{ticket_type},{people_in_group_list[a]}\n")
-    sales_all_tickets_file.close()
+def bookings_review(ticket_name_list, people_in_group_list, new_ticket_name_list, new_people_in_group_list):
+     # The number of tickets sold for each type of ticket
+    # sales_all_tickets_file = open("Number_tickets_sold_by_type.txt", "a")
+    # for a, ticket_type in enumerate(ticket_name_list):
+    #     sales_all_tickets_file.write(f"{ticket_type},{people_in_group_list[a]}\n")
+    # sales_all_tickets_file.close()
+    day1_list = []
+    day2_list = []
+    weekend_camp_list = []
+    for i, type in enumerate(new_ticket_name_list):
+        if type == "Day1":
+            day1_list.append(int(new_people_in_group_list[i]))
+        elif type == "Day2":
+            day2_list.append(int(new_people_in_group_list[i]))
+        else:
+            weekend_camp_list.append(int(new_people_in_group_list[i]))
+    total_day1 = sum(day1_list)
+    total_day2 = sum(day2_list)
+    total_weekend_camp = sum(weekend_camp_list)
+    print(f"Day1_total: {total_day1}\nDay2_total: {total_day2}\nWeekend_Camp_total: {total_weekend_camp}")
+    return total_day1, total_day2, total_weekend_camp
+
+
 def exit_option(sales_file, extras_file, extras_ticket_type,extras_quantity):
     # The file extras.txt keeps track of the number attending the fine dining .
     extras_track_file = open(extras_file, "w")  # open file in write mode
@@ -149,14 +166,14 @@ def main():
         if choice == '1':
             feedback, ticket_name_list, people_in_group_list = booking_a_ticket(type_of_ticket, ticket_price, extras_ticket_type, extras_quantity, keep_track_fine_dinning)
             print(feedback)
-
             new_ticket_name_list += ticket_name_list
             new_people_in_group_list += people_in_group_list
             print(ticket_name_list, people_in_group_list)
             print(new_ticket_name_list)
             print(new_people_in_group_list)
         elif choice == '2':
-            bookings_review(ticket_name_list, people_in_group_list)
+            day1, day2, weekend_camp = bookings_review(ticket_name_list, people_in_group_list, new_ticket_name_list, new_people_in_group_list)
+            print(f"Day1: {day1}\nDay2: {day2}\nWeekend-Camp: {weekend_camp}")
         elif choice == '3':
             exit_option(tickets_menu_file, keep_track_fine_dinning, extras_ticket_type, extras_quantity)
             break
