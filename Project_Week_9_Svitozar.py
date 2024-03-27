@@ -33,12 +33,20 @@ def booking_a_ticket(types_of_tickets, ticket_prices, extras_ticket_type, extras
     # Greeting
     option = "BOOKING"
     full_name = f"{NAME_FESTIVAL} ({option})"
-    print(f"{full_name}\n{len(full_name) * '='}")
+    print(f"\n{full_name}\n{len(full_name) * '='}")
     for i, name in enumerate(types_of_tickets):
         print(f"{i+1}. {name:<15}€{ticket_prices[i]:.2f}")
     # code
     price = 0
     name = useful_functions.get_string("Enter your name => ")
+    # name = name.capitalize()
+    # if " " in name:
+    #     name = name.rstrip()
+    #     if name:
+    #         info_name = name.split(" ")
+    #         first_name = info_name[0]
+    #         surname = info_name[1]
+    #         name = f"{first_name}_{surname}"
     phone_number = useful_functions.get_positive_int("Enter your phone number => ")
     while True:
         # ticket_type_choice = input(f"Choose the ticket type:\n" \
@@ -110,32 +118,39 @@ def booking_a_ticket(types_of_tickets, ticket_prices, extras_ticket_type, extras
            f"{'Ticket Type:':<20}{ticket_type}\n" \
            f"{'Fine Dining:':<20}{answer_fine_dining}\n" \
            f"{'Total Cost:':<20}€{price:.2f}\n")
+    # info client_ticket_booking
     ticket_name_sale = open(f"{name}_sale.txt", "w")
     ticket_name_sale.write(f"{ticket_type},{phone_number},{people_in_group},{price},{answer_fine_dining}")
     ticket_name_sale.close()
-    # extras_track_file = open(keep_track_fine_dinning)
-    # for k, name in enumerate(extras_ticket_type):
-    #     extras_track_file.write(f"FineDining{name},{extras_quantity[k]}")
-    # extras_track_file.close()
+    # The file extras.txt keeps track of the number attending the fine dining .
+    extras_track_file = open(keep_track_fine_dinning, "w") # open file in write mode
+    for k, name in enumerate(extras_ticket_type):
+        extras_track_file.write(f"{name},{int(extras_quantity[k])}\n") # write data to file
+    extras_track_file.close() # Close the file after writing
+    # the number of tickets sold for each type of ticket
+    sales_all_tickets_file = open("Number_tickes_sold_by_type.txt", "w")
+    sales_all_tickets_file.write(f"{ticket_type},{people_in_group}")
+    sales_all_tickets_file.close()
     # return name, phone_number, ticket_type, people_in_group, answer_fine_dining, price
     return feedback_to_user
+def bookings_review():
+    pass
 def main():
     tickets_menu_file = "Sales_2022.txt"
     keep_track_fine_dinning = "Extras.txt"
     type_of_ticket, ticket_price,  max_available_tickets, tickets_sold, extras_ticket_type, extras_quantity  = get_tickets_lists(tickets_menu_file, keep_track_fine_dinning)
     while True:
-        print(f"{NAME_FESTIVAL}\n{len(NAME_FESTIVAL) * '='}")
+        print(f"\n{NAME_FESTIVAL}\n{len(NAME_FESTIVAL) * '='}")
         menu = (f"1. Make a Booking\n" \
                 "2. Review Bookings\n" \
                 "3. Exit")
         print(menu)
-        choice = input("Enter your choice: ")
+        choice = input("\nEnter your choice: ")
         if choice == '1':
             feedback = booking_a_ticket(type_of_ticket, ticket_price, extras_ticket_type, extras_quantity, keep_track_fine_dinning)
             print(feedback)
-            print(extras_ticket_type, extras_quantity)
         elif choice == '2':
-            pass
+            bookings_review(keep_track_fine_dinning)
         elif choice == '3':
             break
         else:
