@@ -17,7 +17,7 @@ def get_string(prompt):
             if name_length == amount_isalpha and 0 < len(full_name) < 15:
                 break
             else:
-                print("The name must be alphabetic and between 1 and 14 charactersAAAAAAAA.")
+                print("The name must be alphabetic and between 1 and 14 characters.")
         except:
             print("Error occured.")
     return full_name
