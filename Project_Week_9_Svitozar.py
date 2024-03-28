@@ -28,7 +28,6 @@ def get_tickets_lists(filename, extras_file):
             extras_quantity.append(int(info_line1[1]))
     fine_dining_file.close()
     return  types_of_tickets, ticket_prices, max_available_tickets, tickets_sold, extras_ticket_type, extras_quantity
-
 # 1. Booking a Ticket
 def booking_a_ticket(types_of_tickets, ticket_prices, max_available_tickets, tickets_sold, extras_quantity):
     ticket_name_list = []
@@ -49,24 +48,20 @@ def booking_a_ticket(types_of_tickets, ticket_prices, max_available_tickets, tic
         if ticket_type_choice == "1":
             ticket_type = "Day1"
             people_in_group = useful_functions.get_number_max4("How many people in your group? ")
+            # Tickets left (updated)
+            max_available_tickets[0] -= people_in_group
+            # The number of tickets sold for each type of ticket (updated)
+            tickets_sold[0] += people_in_group
             if people_in_group > 1 and people_in_group <= 4:
                 while True:
                     fine_dining = useful_functions.get_string("Do you require a fine dining pass (Y/N)? ")
                     if fine_dining == "Y" or fine_dining == "Yes":
                         answer_fine_dining = "Yes"
                         extras_quantity[0] += people_in_group
-                        # Tickets left (updated)
-                        max_available_tickets[0] -= people_in_group
-                        # The number of tickets sold for each type of ticket (updated)
-                        tickets_sold[0] += people_in_group
                         price = (people_in_group * ticket_prices[0]) + (20 * people_in_group)
                         break
                     elif fine_dining == "N" or fine_dining == "No":
                         price = ticket_prices[0] * people_in_group
-                        # Tickets left (updated)
-                        max_available_tickets[0] -= people_in_group
-                        # The number of tickets sold for each type of ticket (updated)
-                        tickets_sold[0] += people_in_group
                         answer_fine_dining = "No"
                         break
                     else:
@@ -86,17 +81,13 @@ def booking_a_ticket(types_of_tickets, ticket_prices, max_available_tickets, tic
             if people_in_group > 1 and people_in_group <= 4:
                 while True:
                     fine_dining = useful_functions.get_string("Do you require a fine dining pass (Y/N)? ").capitalize()
-                    if fine_dining == "Y" or fine_dining == "yes":
+                    if fine_dining == "Y" or fine_dining == "Yes":
                         answer_fine_dining = "Yes"
                         extras_quantity[1] += people_in_group
                         price = (people_in_group * ticket_prices[1]) + (20 * people_in_group)
                         break
-                    elif fine_dining == "N" or fine_dining == "no":
+                    elif fine_dining == "N" or fine_dining == "No":
                         answer_fine_dining = "No"
-                        # Tickets left (updated)
-                        max_available_tickets[1] -= people_in_group
-                        # The number of tickets sold for each type of ticket (updated)
-                        tickets_sold[1] += people_in_group
                         price = ticket_prices[1] * people_in_group
                         break
                     else:
@@ -126,7 +117,6 @@ def booking_a_ticket(types_of_tickets, ticket_prices, max_available_tickets, tic
            f"{'Ticket Type:':<20}{ticket_type}\n" \
            f"{'Fine Dining:':<20}{answer_fine_dining}\n" \
            f"{'Total Cost:':<20}€{price:.2f}\n")
-
     # info client_ticket_booking
     full_name_with_list = name.split(" ")
     full_name_with_ = "_".join(full_name_with_list)
@@ -162,21 +152,17 @@ def bookings_review(new_ticket_name_list, new_people_in_group_list, extras_ticke
             fine_dining_day1_list.append(int(extras_quantity[k]))
         elif item == "FineDiningDay2":
             fine_dining_day2_list.append(int(extras_quantity[k]))
-        else:
-            print("O")
     fine_dining_day1 = sum(fine_dining_day1_list)
     fine_dining_day2 = sum(fine_dining_day2_list)
     return total_day1, total_day2, total_weekend_camp, fine_dining_day1, fine_dining_day2
 # 3. Exit
 def exit_option(sales_file, extras_file, type_of_ticket, ticket_price, max_available_tickets, tickets_sold, extras_ticket_type, extras_quantity):
-    # The number of tickets sold for each type of ticket, the bookings file Sales_2024.txt is updated
-    print(type_of_ticket, ticket_price,  max_available_tickets, tickets_sold)
-    print()
+    # The bookings file Sales_2024.txt is updated.
     change_sales_file = open(sales_file, "w")
     for i, name in enumerate(type_of_ticket):
         change_sales_file.write(f"{name},{int(ticket_price[i])},{max_available_tickets[i]},{tickets_sold[i]}\n")
     change_sales_file.close()
-    # The file extras.txt keeps track of the number attending the fine dining .
+    # The file extras.txt keeps track of the number attending the fine dining (updated).
     extras_track_file = open(extras_file, "w")  # open file in write mode
     for k, name in enumerate(extras_ticket_type):
         extras_track_file.write(f"{name},{int(extras_quantity[k])}\n")  # write data to file
@@ -211,7 +197,7 @@ def main():
             print(f"{'Day1:':<20}{day1}\n{'Day2:':<20}{day2}\n{'Weekend-Camp:':<20}{weekend_camp}\n")
             print(f"{'Fine Dining Day 1:':<20}{fine_dining_day1}\n{'Fine Dining Day 2:':<20}{fine_dining_day2}\n")
         elif choice == '3':
-            exit_option(sales_file, extras_file,type_of_ticket, ticket_price,  max_available_tickets, tickets_sold, extras_ticket_type, extras_quantity)
+            exit_option(sales_file, extras_file, type_of_ticket, ticket_price,  max_available_tickets, tickets_sold, extras_ticket_type, extras_quantity)
             print("Exiting...")
             print("\U0001F44B")
             break
