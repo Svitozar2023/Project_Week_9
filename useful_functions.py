@@ -21,12 +21,26 @@ def get_string(prompt):
         except:
             print("Error occured.")
     return full_name
+def get_answer_string(prompt):
+    while True:
+        try:
+            answer = input(prompt)
+            answer_length = len(answer)
+            if answer_length != 0 and answer.isalpha():
+                break
+            else:
+                print("Error occured")
+        except:
+            print("Error occured")
+    return answer
 def get_positive_int(prompt):
     while True:
         try:
             num = int(input(prompt))
             if num >= 0:
                 break
+            else:
+                print("It must be a positive number ")
         except:
             print("Error occured")
     return num
@@ -45,5 +59,9 @@ def get_number_max4(prompt):
 def main():
     name = get_string("Enter your name: ")
     print(f"Name: {name}")
+    # num = get_positive_int("Enter a number ")
+    # print(num)
+    # answer = get_answer_string("Y/N ?")
+    # print(answer)
 if __name__ == "__main__":
     main()
